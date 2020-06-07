@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 import java.util.function.ToIntFunction;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -99,17 +100,12 @@ public class StreamAssignment {
         int expectedLength = 3;
 
         Person[] result = null;
-           int amount=0;
-        //Write code here
-        for(Person p:people) {
-            if (p.getFirstName().equals("Erik"))
-                amount++;
-        }
-        //assertNotNull(result);
 
-        assertEquals(expectedLength,
-              //  result.length
-        amount);
+        result= people.stream().filter(person -> person.getFirstName().equals("Erik")).toArray(Person[]::new);
+
+        assertNotNull(result);
+
+        assertEquals(expectedLength,result.length);
     }
 
     /**

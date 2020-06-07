@@ -118,6 +118,7 @@ public class StreamAssignment {
         Optional<Person> optional = null;
 
         //Write code here
+        optional= people.stream().filter(person -> person.getPersonId()==5436).findFirst();
 
         assertNotNull(optional);
         assertTrue(optional.isPresent());

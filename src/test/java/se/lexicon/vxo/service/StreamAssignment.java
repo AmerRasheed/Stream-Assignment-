@@ -9,6 +9,7 @@ import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 import javax.swing.plaf.IconUIResource;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collector;
@@ -85,7 +86,10 @@ public class StreamAssignment {
         int expectedSize = 8882;
         Set<LocalDate> dates = null;
 
-        //Write code here
+       dates= people.stream()
+                .collect(()->new TreeSet(),
+                        (set,p)->set.add(p.getDateOfBirth()),
+                        ((treeSet, treeSet2) -> treeSet.addAll(treeSet)));
 
         assertNotNull(dates);
         assertTrue(dates instanceof TreeSet);
@@ -117,7 +121,6 @@ public class StreamAssignment {
 
         Optional<Person> optional = null;
 
-        //Write code here
         optional= people.stream().filter(person -> person.getPersonId()==5436).findFirst();
 
         assertNotNull(optional);
@@ -157,7 +160,8 @@ public class StreamAssignment {
     }
 
     /**
-     * In a Stream Filter out one person with id 5914 from people and take the birthdate and build a string from data that the date contains then
+     * In a Stream Filter out one person with id 5914 from people
+     * and take the birthdate and build a string from data that the date contains then
      * return the string.
      */
     @Test
@@ -167,7 +171,11 @@ public class StreamAssignment {
 
         Optional<String> optional = null;
 
-        //Write code here
+        Optional<Person> p = people.stream().filter(person -> person.getPersonId() == 5914).findFirst();
+//.toString(), "eeee dd MMM YYYY")
+        optional= Optional.of(String.format(p.get().getDateOfBirth().format(DateTimeFormatter.ofPattern("eeee dd MMM YYYY"))));
+
+
 
         assertNotNull(optional);
         assertTrue(optional.isPresent());

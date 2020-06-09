@@ -9,11 +9,13 @@ import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 import javax.swing.plaf.IconUIResource;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -87,7 +89,7 @@ public class StreamAssignment {
         Set<LocalDate> dates = null;
 
        dates= people.stream()
-                .collect(()->new TreeSet(),
+                .collect(()->new TreeSet(),                       //(Supplier<TreeSet>) TreeSet::new, STYLE 2
                         (set,p)->set.add(p.getDateOfBirth()),
                         ((treeSet, treeSet2) -> treeSet.addAll(treeSet)));
 
@@ -171,9 +173,9 @@ public class StreamAssignment {
 
         Optional<String> optional = null;
 
-        Optional<Person> p = people.stream().filter(person -> person.getPersonId() == 5914).findFirst();
+     //   Optional<Person> p = people.stream().filter(person -> person.getPersonId() == 5914).findFirst();
 //.toString(), "eeee dd MMM YYYY")
-        optional= Optional.of(String.format(p.get().getDateOfBirth().format(DateTimeFormatter.ofPattern("eeee dd MMM YYYY"))));
+       // optional= Optional.of(String.format(p.get().getDateOfBirth().format(DateTimeFormatter)));
 
 
 
@@ -194,6 +196,7 @@ public class StreamAssignment {
         double averageAge = 0;
 
         //Write code here
+        //people.stream().mapToInt()
 
         assertTrue(averageAge > 0);
         assertEquals(expected, averageAge, .01);
@@ -209,13 +212,18 @@ public class StreamAssignment {
         String[] result = null;
 
         //Write code here
+      List<String> result2=people.stream().map(person -> person.getFirstName())
+        .distinct()
+        .collect(Collectors.toList());
+        //System.out.println(result2);
 
         assertNotNull(result);
         assertArrayEquals(expected, result);
     }
 
     /**
-     * Extract from people a map where each key is a last name with a value containing a list of all that has that lastName
+     * Extract from people a map where each key is a last name with a value containing a list
+     * of all that has that lastName
      */
     @Test
     public void task13(){
@@ -223,6 +231,7 @@ public class StreamAssignment {
         Map<String, List<Person>> personMap = null;
 
         //Write code here
+       // personMap=people.stream().map(Person::getLastName).collect(Collectors.toList());
 
         assertNotNull(personMap);
         assertEquals(expectedSize, personMap.size());
@@ -237,7 +246,12 @@ public class StreamAssignment {
 
         //Write code here
 
-
+        int limit = Year.of(2020).isLeap() ? 366 : 365;    // if leap year (? TRUE) return 366 else (: FALSE) return 365
+        LocalDate start = LocalDate.ofYearDay(2020,1);
+        //i++                                  Like for loop incrementer
+         _2020_dates = Stream.iterate(start, date->date.plusDays(1))  // Every element of stream is being incremented (by using iterator)
+                .limit(limit)                                         // within the limit of 366 days
+                .toArray(LocalDate[]::new);                           // each array element is being populated with produced date (TWO line above)
         assertNotNull(_2020_dates);
         assertEquals(366, _2020_dates.length);
         assertEquals(LocalDate.parse("2020-01-01"), _2020_dates[0]);
